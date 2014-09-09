@@ -29,5 +29,6 @@ test-suite TestSol1
   hs-source-dirs:  
                   src,
                   src/week1,
-                  src/tests
+                  src/tests,
+                  src/tests/week1
 

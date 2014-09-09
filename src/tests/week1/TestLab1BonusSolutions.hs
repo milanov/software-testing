@@ -5,7 +5,7 @@ import Test.HUnit.Lang
 import Test.Framework
 import Helper
 
-import Lab1BonusSolutions
+import Lab1Bonus
 
 -- Exercise 1. The tests here and perfect for QuickCheck (comparing with the
 -- built-in functions from Prelude) and should someday be rewritten using it.
