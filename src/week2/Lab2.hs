@@ -96,6 +96,14 @@ arbitDeran n = arbitDeran' 0 [0..n-1]
 
 
 -- Exercise 9
+-- We use the famous problem in Probability which is to calculate the chance (the number of successes) 
+-- of having at least one element on its place after random shuffling. Let's say this number is m.
+-- The answer to owr problem will then be n! - m.
+-- We know that the answer to the 'famous' problem question is n! * (1 - 1/2! + 1/3! ....).
+-- So the answer to ours is n!*(1/2! - 1/3! ....).
+-- Looking this from backwards we have
+-- (-1)^(n)* 1/n! * n! + n * ((-1)^(n-1) * (n-1)!/(n-1)! + (n-1) * (...)) = (-1)^(n) + n * ((-1)^(n-1) + (n-1) * (...))
+-- And this leads to our solution:
 numberOfDerangement :: Int -> Int
 numberOfDerangement 1 = 0
 numberOfDerangement n = ((-1) ^ n) + n * (numberOfDerangement (n - 1))
