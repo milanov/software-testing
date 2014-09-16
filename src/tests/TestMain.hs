@@ -5,6 +5,7 @@ module Main where
 import Test.Framework
 
 import {-@ HTF_TESTS @-} TestSol1
+import {-@ HTF_TESTS @-} TestLab2
 import {-@ HTF_TESTS @-} TestLab1BonusSolutions
 
 main :: IO()
