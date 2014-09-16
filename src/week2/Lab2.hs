@@ -5,7 +5,7 @@ import System.Random
 
 
 -- Exercise 1
--- For the testing procedure we've used HUnit unit tests located at src/tests/week2/TestLab2.hs (Exercise 1).
+-- For the testing procedure we've used HUnit unit tests located at src/tests/week2/TestLab2.hs, Exercise 1.
 data Shape = NoTriangle | Equilateral | Isosceles | Rectangular | Other deriving (Eq,Show)
 
 triangle :: Integer -> Integer -> Integer -> Shape
@@ -23,7 +23,7 @@ isPermutation l1 l2 = length l1 == length l2 && l1 \\ l2 == []
 
 
 -- Exercise 3
--- For the testing procedure we've used HUnit unit tests located at src/tests/week2/TestLab2.hs (Exercise 2).
+-- For the testing procedure we've used HUnit unit tests located at src/tests/week2/TestLab2.hs, Exercise 2.
 -- Some testable properties are:
 -- * the lengths of the two lists should be equal
 -- * there isn't an element from one list which is not in the other list
@@ -72,9 +72,10 @@ testIsDerangement l1 l2 = length l1 == length l2 &&
 
 
 -- Exercise 8
--- The correctness of this function (arbitDeran) does not follow from tests of the other
--- functions. This is because it does not uses any of them. Therefore a separate testing
--- suite is needed.
+-- The correctness of this function (arbitDeran) can be proven by checking whether
+-- the returned list is a derangement of [0..n-1]. This can be accomplished by
+-- using the isDerangement function and therefore the correctness of this function depends
+-- on the tests for isDerangement function.
 pick :: [a] -> IO a
 pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
 
