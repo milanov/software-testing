@@ -61,9 +61,10 @@ toCnf = flatten . cnf . nnf . arrowfree
 
 
 -- Exercise 3
--- Time spent: Implementation - 10 minutes
---             Testing        - 20 minutes
--- The tests are both unit and using quickcheck (src/test/week3/TestLab3#Exercise 1)
+-- Time spent: Implementation - 2 hours
+--             Unit testing   - 10 minutes
+-- The actual testing of the `toCnf` function is done using the generator
+-- below (with quickcheck) in src/test/week3/TestLab3#Exercise 3 - toCnf. 
 isLiteral :: Form -> Bool
 isLiteral (Prop _) = True
 isLiteral (Neg(Prop _)) = True
@@ -117,6 +118,9 @@ getListOfRandomFormulas d n = do f  <- getRandomFormula d
                                  return (f:fs)
 
 -- Exercise 4
+-- Time spent: Implementation - 10 minutes
+--             Testing        - 30 minutes
+-- The tests are done using quickcheck (src/test/week3/TestLab3#Exercise 4)
 type Clause = [Int]
 type Clauses = [Clause]
 

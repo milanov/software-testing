@@ -94,6 +94,7 @@ formulaPropsMultiset (Neg(Prop f)) = [-f]
 formulaPropsMultiset (Dsj f) = concatMap formulaPropsMultiset f
 formulaPropsMultiset (Cnj f) = concatMap formulaPropsMultiset f
 
+-- test the properties of the cnf2cls function
 prop_cnf2cls f = formulaLength cnfed == length c &&
                  formulaPropsNumber cnfed == sum (map length c) &&
                  sort (formulaPropsMultiset cnfed) == sort(concat c)
