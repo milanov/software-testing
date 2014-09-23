@@ -17,22 +17,25 @@ cabal-version:       >=1.8
 library
   -- exposed-modules:     
   -- other-modules:       
-  build-depends:       base == 4.6.*, HTF > 0.9, HUnit, random, testpack >= 2.1.2.1, errorcall-eq-instance >= 0.1
+  build-depends:       base == 4.6.*, HTF > 0.9, HUnit, random, testpack >= 2.1.2.1, errorcall-eq-instance >= 0.1, QuickCheck
   ghc-options:      -Wall
   hs-source-dirs: src,
                   src/week1,
-                  src/week2
+                  src/week2,
+                  src/week3
 
 test-suite TestSol1
   type:            exitcode-stdio-1.0
   main-is:         TestMain.hs
   ghc-options:     -Wall -rtsopts
-  build-depends:   base >= 4, HTF > 0.9, HUnit, random, testpack >= 2.1.2.1, errorcall-eq-instance >= 0.1
+  build-depends:   base >= 4, HTF > 0.9, HUnit, random, testpack >= 2.1.2.1, errorcall-eq-instance >= 0.1, QuickCheck
   hs-source-dirs:  
                   src,
                   src/week1,
                   src/week2,
+                  src/week3,
                   src/tests,
                   src/tests/week1,
-                  src/tests/week2
+                  src/tests/week2,
+                  src/tests/week3
 

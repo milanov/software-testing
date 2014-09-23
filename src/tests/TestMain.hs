@@ -5,8 +5,10 @@ module Main where
 import Test.Framework
 
 import {-@ HTF_TESTS @-} TestSol1
-import {-@ HTF_TESTS @-} TestLab2
 import {-@ HTF_TESTS @-} TestLab1BonusSolutions
+import {-@ HTF_TESTS @-} TestLab2
+import {-@ HTF_TESTS @-} TestLab3
+
 
 main :: IO()
 main = htfMain htf_importedTests
