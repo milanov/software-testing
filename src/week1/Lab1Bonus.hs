@@ -46,7 +46,7 @@ table = zip declarations boys
 -- Exercise 1
 -- 1.1
 length' :: [a] -> Int
-length' = foldr (\_ len -> len + 1) 0
+length' = foldr (\_ -> (+1)) 0
 
 -- 1.2
 elem' :: Eq a => a -> [a] -> Bool
@@ -119,6 +119,12 @@ solution5 = [(x,y) | x <- [Knight,Knave],
 -- 2) x != z
 -- 3) x + y + z < 8
 -- Find x, y, z.
+solution6 :: [(Int, Int, Int)]
+solution6 = [(x, y, z) | x <- [1..3], y <- [1..3], z <- [1..3],
+                         2*x > z,
+                         x /= z,
+                         x + y + z < 8,
+                         x <= y, y <= z]
 
 
 -- Exercise 7
