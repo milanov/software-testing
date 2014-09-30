@@ -16,14 +16,15 @@ cabal-version:       >=1.18
 
 library
   -- exposed-modules: 
-  other-modules: Sol1, Sol2, Lab1Bonus, Lab2, Lab3, Week3, GS, TAMO
+  other-modules: Sol1, Sol2, Lab1Bonus, Lab2, Lab3, Week3, GS, TAMO, Lab4, SetOrd
   default-language: Haskell2010       
   build-depends:  base == 4.6.*, random, hspec == 1.*, HUnit, QuickCheck
   ghc-options:    -Wall
   hs-source-dirs: src,
                   src/week1,
                   src/week2,
-                  src/week3
+                  src/week3,
+                  src/week4
 
 test-suite SoftwareTesting2014Specs
     build-depends:    base >= 4, random, hspec == 1.*, HUnit, QuickCheck
@@ -35,7 +36,9 @@ test-suite SoftwareTesting2014Specs
                   src/week1,
                   src/week2,
                   src/week3,
+                  src/week4,
                   src/tests,
                   src/tests/week1,
                   src/tests/week2,
-                  src/tests/week3
+                  src/tests/week3,
+                  src/tests/week4
