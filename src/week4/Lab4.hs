@@ -59,12 +59,10 @@ infixr 5 @@
 r @@ s = nub [ (x,z) | (x,y) <- r, (w,z) <- s, y == w ]
 
 trClos :: Ord a => Rel a -> Rel a
-trClos r = trClosHelper rel rel where rel = nub r
+trClos r | length r == length nextr = r
+         | otherwise = trClos nextr
+         where nextr = nub (sort (r ++ (r @@ r)))
 
-trClosHelper :: Eq a => Rel a -> Rel a -> Rel a
-trClosHelper start current | nextR == [] || nextR \\ current == [] = start
-                           | otherwise = nub (nextR ++ (trClosHelper start nextR))
-                            where nextR = start @@ current
 
 -- Exercise 6 and 7
 -- Time spent: 20 minutes
