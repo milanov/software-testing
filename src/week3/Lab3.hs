@@ -1,8 +1,7 @@
 module Lab3 where
 
-import Test.Framework
 import Week3
-
+import Test.QuickCheck
 
 -- Exercise 1
 -- Time spent: Implementation - 10 minutes
