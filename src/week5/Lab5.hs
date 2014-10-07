@@ -147,18 +147,3 @@ rsuccNode' (s,cs) =
 
 rsolveNs' :: [Node] -> IO [Node]
 rsolveNs' ns = rsearch rsuccNode' solved (return ns)
-
-main :: IO ()
-main = do [r] <- rsolveNs' [emptyN]
-          showNode r
-          putStrLn $ show (consistent' (fst r))
-          showNode $ eraseSubgrids r [(1,1), (4,4), (7,7)]
-          s  <- genProblem r
-          showNode s
-
-
-          putStrLn "la lalkdl kasmd lkasm dlkasmd lkasm dlaskm ddf"
-          p <- genSudoku3Empty
-          putStrLn $ show (uniqueSol p)
-          showNode p
-
