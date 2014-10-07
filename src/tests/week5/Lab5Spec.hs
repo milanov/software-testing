@@ -209,3 +209,32 @@ spec = do
 
     it "returns an empty list for a sudoku which is all filled up" $ do
       openPositions sudokuImproper `shouldBe` []
+
+  describe "constraints" $ do
+    it "returns all the values for every field of the trivial sudoku" $ do
+      constraints sudokuTrivial `shouldBe` [(r, c, [1..9]) | r <- [1..9], c <- [1..9]]
+
+    it "returns an empty array for a filled up sudoku puzzle" $ do
+      constraints sudokuImproper `shouldBe` []
+
+    it "return the correct list of constraints for a sudoku puzzle" $ do
+      let rev = reverse [1..9]
+      let grid = [0:[2..9], 0:[2..9], 0:[2..9], rev, rev, rev, rev, rev, rev]
+      constraints (grid2sud grid) `shouldBe` [(1,1,[1]), (2,1,[1]), (3,1,[1])]
+
+  describe "grow" $ do
+    it "returns an empty tree for an empty growing step" $ do
+      grow (\_ -> []) 0 `shouldBe` T 0 []
+
+    it "returns a properly 'grown' tree corresponding to the growing function" $ do
+      let branch = T 1 [T 2 [], T 2 []]
+      let expectedRes = T 0 [branch, branch]
+
+      grow (\x -> if x < 2 then [x+1, x+1] else []) 0 `shouldBe` expectedRes
+
+  describe "count" $ do
+    it "returns one for a tree with no branches" $ do
+      count (T 0 []) `shouldBe` 1
+
+    it "counts all the nodes in the tree properly" $ do
+      count (T 1 [T 2 [], T 2 []]) `shouldBe` 3
