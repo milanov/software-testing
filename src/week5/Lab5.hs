@@ -20,6 +20,16 @@ minimalHints :: Node -> Bool
 minimalHints n@(s, _) = and [not $ uniqueSol (eraseN n pos) | pos <- filledPositions s]
 
 -- Exercise 3
+-- Yes, it is possible to generate sudoku puzzles with four empty blocks. For proof we can
+-- change the {sublistsOfSubgrids} function to call `sublistsOf 4` instead of `sublistsOf 3`
+-- and we'll see that such puzzles are quickly generated.
+-- It is theoretically impossible to define puzzles with six or more empty blocks, since then
+-- there will always be three empty block in the same row/column, which makes the puzzle
+-- undeterministic (with more than one solution).
+-- The semi-formal proof for why a deterministic Sudoku problem with five empty blocks cannot
+-- exist is given here: http://puzzling.stackexchange.com/a/319. Another way of checking this
+-- is again if we run the {sublistsOfSubgrids} with `sublistsOf 5` and then wait for all the
+-- 6,670,903,752,021,072,936,960 solutions to be checked ;)
 positionsInSubgrid :: (Row, Column) -> [(Row, Column)]
 positionsInSubgrid (r, c) = [ (r',c') | r' <- bl r, c' <- bl c ]
 
