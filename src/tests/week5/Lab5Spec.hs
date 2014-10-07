@@ -2,38 +2,47 @@ module Lab5Spec(spec) where
 
 import Test.Hspec
 import Test.QuickCheck
+import Data.List
 
 import Lab5
 import Week5
 
 
-sudoku :: Sudoku
-sudoku (r,c) = 
-            case (r,c) of
-              (1,8) -> 1
-              (2,6) -> 2
-              (2,9) -> 3
-              (3,4) -> 4
-              (4,7) -> 5
-              (5,1) -> 4
-              (5,3) -> 1
-              (5,4) -> 6
-              (6,3) -> 7
-              (6,4) -> 1
-              (7,2) -> 5
-              (7,7) -> 2
-              (8,5) -> 8
-              (8,8) -> 4
-              (9,2) -> 3
-              (9,4) -> 9
-              (9,5) -> 1
-              (_,_) -> 0
+-- a party real Sudoku function and its corresponding grid
+sudokuM :: Sudoku
+sudokuM (r,c) = if r == c then r else 0
+
+gridM :: [[Value]]
+gridM = [[1,0,0,0,0,0,0,0,0],
+        [0,2,0,0,0,0,0,0,0],
+        [0,0,3,0,0,0,0,0,0],
+        [0,0,0,4,0,0,0,0,0],
+        [0,0,0,0,5,0,0,0,0],
+        [0,0,0,0,0,6,0,0,0],
+        [0,0,0,0,0,0,7,0,0],
+        [0,0,0,0,0,0,0,8,0],
+        [0,0,0,0,0,0,0,0,9]]
+
+-- a trivial Sudoku function and its corresponding grid
+sudokuTrivial :: Sudoku
+sudokuTrivial _ = 0
+
+gridTrivial :: [[Value]]
+gridTrivial = [[0,0,0,0,0,0,0,0,0] | r <- [1..9]]
+
+-- an improper sudoku function (returns duplicates for rows/columns/subgrids)
+sudokuImproper :: Sudoku
+sudokuImproper _ = 1
+
+-- checks whether two Sudoku function produce the same values
+eqSudokus :: Sudoku -> Sudoku -> Bool
+eqSudokus s1 s2 = and [ s1 (r,c) == s2 (r, c) | r <- [1..9], c <- [1..9]]
 
 spec :: Spec
 spec = do
-  describe "isMinimal" $ do
-    it "returns false for empty sudoku" $ do
-      isMinimal emptyN `shouldBe` False
+  -- describe "isMinimal" $ do
+  --   it "returns false for empty sudoku" $ do
+  --     isMinimal emptyN `shouldBe` False
 
     --it "returns true for a minimal sudoku" $ do
     --  let sudoku = grid2sud  [[0,0,0,0,0,0,0,1,0],
@@ -50,48 +59,35 @@ spec = do
 
   describe "sud2grid" $ do
     it "returns the grid from the given sudoku" $ do
-      sud2grid sudoku `shouldBe` [[0,0,0,0,0,0,0,1,0],
-                                  [0,0,0,0,0,2,0,0,3],
-                                  [0,0,0,4,0,0,0,0,0],
-                                  [0,0,0,0,0,0,5,0,0],
-                                  [4,0,1,6,0,0,0,0,0],
-                                  [0,0,7,1,0,0,0,0,0],
-                                  [0,5,0,0,0,0,2,0,0],
-                                  [0,0,0,0,8,0,0,4,0],
-                                  [0,3,0,9,1,0,0,0,0]]
+      sud2grid sudokuM `shouldBe` gridM
 
-    --it "should return a grid with the right dimensions" $ property $
-    --  propSud2GridDimensions
+    it "works for the trivial sudoku" $ do
+      sud2grid sudokuTrivial `shouldBe` gridTrivial
 
   describe "grid2sud" $ do
     it "returns the grid from the given sudoku" $ do
-      let grid = [[0,0,0,0,0,0,0,1,0],
-                  [0,0,0,0,0,2,0,0,3],
-                  [0,0,0,4,0,0,0,0,0],
-                  [0,0,0,0,0,0,5,0,0],
-                  [4,0,1,6,0,0,0,0,0],
-                  [0,0,7,1,0,0,0,0,0],
-                  [0,5,0,0,0,0,2,0,0],
-                  [0,0,0,0,8,0,0,4,0],
-                  [0,3,0,9,1,0,0,0,0]]
-      let sud = grid2sud grid
-      and [ sud (r,c) == ((grid !! (r - 1)) !! (c - 1)) | r <- [1..9], c <- [1..9]] `shouldBe` True
+      eqSudokus (grid2sud gridM) sudokuM `shouldBe` True
+
+    it "works for the trivial sudoku" $ do
+      eqSudokus (grid2sud gridTrivial) sudokuTrivial `shouldBe` True
 
   describe "bl" $ do
-    it "returns the right array of Int elements" $ do
-      and ( [ bl x == [1,2,3] | x <- [1..3] ] ++
-            [ bl x == [4,5,6] | x <- [4..6] ] ++
-            [ bl x == [7,8,9] | x <- [7..9] ]) `shouldBe` True
+    it "returns the right array of values" $ do
+      let intervals = [[1..3], [4..6], [7..9]]
+      and [bl x == block | block <- intervals, x <- block] `shouldBe` True
+
+    it "returns an empty list if the given value is not between 1 and 9" $ do
+      bl 90 `shouldBe` []
 
   describe "subGrid" $ do
     it "returns an empty array if the row is not between 1 and 9" $ do
-      subGrid sudoku (10,1) `shouldBe` []
+      subGrid sudokuM (10,1) `shouldBe` []
 
     it "returns an empty array if the column is not between 1 and 9" $ do
-      subGrid sudoku (1,10) `shouldBe` []
+      subGrid sudokuM (1,10) `shouldBe` []
 
     it "returns the right values when the row and the column are between 1 and 9" $ do
-      subGrid sudoku (1,4) `shouldBe` [0,0,0,0,0,2,4,0,0]
+      subGrid sudokuM (1, 3) `shouldBe` [1,0,0,0,2,0,0,0,3]
 
   describe "freeInSeq" $ do
     it "returns an empty array if all the values are present in the sequence" $ do
@@ -105,38 +101,111 @@ spec = do
 
   describe "freeInRow" $ do
     it "returns all the values if the row is not between 1 and 9" $ do
-      freeInRow sudoku 90 `shouldBe` [1..9]
+      freeInRow sudokuM 90 `shouldBe` [1..9]
 
     it "returns the right free values if the row is between 1 and 9" $ do
-      freeInRow sudoku 9 `shouldBe` [2,4,5,6,7,8]
+      freeInRow sudokuM 9 `shouldBe` [1..8]
 
   describe "freeInColumn" $ do
     it "returns all the values if the column is not between 1 and 9" $ do
-      freeInColumn sudoku 90 `shouldBe` [1..9]
+      freeInColumn sudokuM 90 `shouldBe` [1..9]
 
     it "returns the right free values if the column is between 1 and 9" $ do
-      freeInColumn sudoku 9 `shouldBe` [1,2,4,5,6,7,8,9]
+      freeInColumn sudokuM 9 `shouldBe` [1..8]
 
   describe "freeInSubgrid" $ do
     it "returns all the values if the row or column are not between 1 and 9" $ do
-      freeInSubgrid sudoku (90,1) `shouldBe` [1..9]
+      freeInSubgrid sudokuM (90,1) `shouldBe` [1..9]
 
     it "returns the right free values if the row and column are between 1 and 9" $ do
-      freeInSubgrid sudoku (5,5) `shouldBe` [2,3,4,5,7,8,9]
+      freeInSubgrid sudokuM (5,5) `shouldBe` ([1..3] ++ [7..9])
 
   describe "freeAtPos" $ do
     it "returns all the values if the row and column are not between 1 and 9" $ do
-      freeAtPos sudoku (20,10) `shouldBe` [1..9]
+      freeAtPos sudokuM (20,10) `shouldBe` [1..9]
 
     it "returns the right free values if the row and column are between 1 and 9" $ do
-      freeAtPos sudoku (5,5) `shouldBe` [2,3,5,7,9]
+      freeAtPos sudokuM (5,5) `shouldBe` ([1..3] ++ [7..9])
 
+  describe "injective" $ do
+    it "returns true when the given argument does not contain duplicates" $ do
+      injective [1..9] `shouldBe` True
 
--- Properties
+    it "returns false when the given argument contains duplicates" $ do
+      injective [1,2,1] `shouldBe` False
 
---propSud2GridDimensions :: Sudoku -> Bool
---propSud2GridDimensions sud = (length (sud2grid sud) == 9) && (all (== 9) $ (map length (sud2grid sud)))
+  describe "rowInjective" $ do
+    it "returns true when the filled elements from a given row are distinct" $ do
+      rowInjective sudokuM 1 `shouldBe` True
 
+    it "workds for the trivial case (no elements filled in the sudoku)" $ do
+      rowInjective sudokuTrivial 1 `shouldBe` True
 
+    it "returns false when the given row's filled elements contain duplicates" $ do
+      rowInjective sudokuImproper 1 `shouldBe` False
 
+  describe "colInjective" $ do
+    it "returns true when the filled elements from a given column are distinct" $ do
+      colInjective sudokuM 1 `shouldBe` True
 
+    it "workds for the trivial case (no elements filled in the sudoku)" $ do
+      colInjective sudokuTrivial 1 `shouldBe` True
+
+    it "returns false when the given column's filled elements contain duplicates" $ do
+      colInjective sudokuImproper 1 `shouldBe` False
+
+  describe "subgridInjective" $ do
+    it "returns true when the filled elements from a given subgrid are distinct" $ do
+      subgridInjective sudokuM (1,1) `shouldBe` True
+
+    it "workds for the trivial case (no elements filled in the sudoku)" $ do
+      subgridInjective sudokuTrivial (1,1) `shouldBe` True
+
+    it "returns false when the given subgrid's filled elements contain duplicates" $ do
+      subgridInjective sudokuImproper (1,1) `shouldBe` False
+
+  describe "consistent" $ do
+    it "considers a valid sudoku to be consistent" $ do
+      consistent sudokuM `shouldBe` True
+
+    it "considers the trivial emtpy sudoku to be consistent" $ do
+      consistent sudokuTrivial `shouldBe` True
+
+    it "returns false when the sudoku has either rows/columns/subgrids which are not injective" $ do
+      consistent sudokuImproper `shouldBe` False
+
+  describe "update" $ do
+    it "returns the new value after an update to the sudoku" $ do
+      let newSudoku = update sudokuM ((1,1), 9)
+      newSudoku (1,1) `shouldBe` 9
+
+    it "does not change the values of the other fields" $ do
+      let newSudoku = update sudokuM ((1,1), 1)
+      eqSudokus newSudoku sudokuM `shouldBe` True
+
+  describe "solved" $ do
+    it "returns true when the given node doesn't have constraints" $ do
+      solved (sudokuM, []) `shouldBe` True
+
+    it "returns false when there are constraints in the given node" $ do
+      solved (sudokuM, [(1,1,[1])]) `shouldBe` False
+
+  describe "sameblock" $ do
+    it "returns true when the two fields are in the same block" $ do
+      sameblock (1,1) (3,3) `shouldBe` True
+
+    it "returns false when the two fields are no in the same block" $ do
+      sameblock (1,1) (5,5) `shouldBe` False
+
+  describe "openPositions" $ do
+    let allPos = [(r,c) | r <- [1..9], c <- [1..9]]
+    let diagPos = [(r,r) | r <- [1..9]]
+
+    it "returns all the open positions" $ do
+      openPositions sudokuM `shouldBe` (allPos \\ diagPos)
+
+    it "returns all the positions for the trivial sudoku" $ do
+      openPositions sudokuTrivial `shouldBe` allPos
+
+    it "returns an empty list for a sudoku which is all filled up" $ do
+      openPositions sudokuImproper `shouldBe` []

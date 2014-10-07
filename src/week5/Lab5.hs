@@ -3,8 +3,16 @@ module Lab5 where
 import Data.List
 import Week5
 
+-- Exercise 1
+-- Hspec specifications to some of the functions from the Week5 module are located
+-- in src/tests/week5/Lab5Spec.hs. Yes, it is possible to use Quickcheck. Sudokues
+-- are very well logically defined and have properties, which can be tested using 
+-- QuickCheck. However, we're not using it since this would require us to rewrite
+-- all the sudoku random generation using Gen and not IO.
+
 
 -- Exercise 2
+-- Time spent: 20 minutes
 minimal :: Node -> Bool
 minimal n = uniqueSol n && minimalHints n
 
@@ -19,7 +27,7 @@ sublistsOf :: Int -> [a] -> [[a]]
 sublistsOf n = filter ((== n) . length) . subsequences
 
 sublistsOfSubgrids :: IO [[(Row, Column)]]
-sublistsOfSubgrids = randomize $ sublistsOf 4 [ (r, c) | r <- [1,4,7], c <- [1,4,7]]
+sublistsOfSubgrids = randomize $ sublistsOf 3 [ (r, c) | r <- [1,4,7], c <- [1,4,7]]
 
 eraseSubgrid :: Node -> (Row, Column) -> Node
 eraseSubgrid n rc = eraseSubgridHelper n (positionsInSubgrid rc)
@@ -36,6 +44,7 @@ genSudoku3Empty :: IO Node
 genSudoku3Empty = genSudoku3EmptyHelper (solveNs [emptyN])
 
 genSudoku3EmptyHelper :: [Node] -> IO Node
+genSudoku3EmptyHelper [] = error "No node found"
 genSudoku3EmptyHelper (x:xs) = do
                                 subLists <- sublistsOfSubgrids
                                 let unique = find uniqueSol (map (eraseSubgrids x) subLists)
