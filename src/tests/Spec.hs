@@ -6,6 +6,7 @@ import qualified Lab2Spec
 import qualified Lab3Spec
 import qualified Lab4Spec
 import qualified Lab5Spec
+import qualified Lab6Spec
 
 main :: IO ()
 main = hspec $ do
@@ -15,3 +16,4 @@ main = hspec $ do
   describe "Lab3"               Lab3Spec.spec
   describe "Lab4"               Lab4Spec.spec
   describe "Lab5"               Lab5Spec.spec
+  describe "Lab6"               Lab6Spec.spec
