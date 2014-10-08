@@ -19,4 +19,9 @@ exM' num expon modul = exMHelper num expon modul 1
         exMHelper num expon modul res = exMHelper (num * num `mod` modul) (expon `div` 2) modul nRes
           where nRes = if odd expon then (res * num `mod` modul) else res
 
+exMK :: Integer -> Integer -> Integer -> Integer
+exMK base 0 m = 1
+exMK base e m | odd e = rem ((rem base m) * (exMK base (e - 1) m)) m
+              | otherwise = rem ((exMK base (div e 2) m) ^ 2) m
+
 -- Exercise 2
