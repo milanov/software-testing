@@ -14,24 +14,18 @@ carmichael = [ (6*k+1)*(12*k+1)*(18*k+1) |
 
 
 -- Exercise 1
-exMWiki :: Integer -> Integer -> Integer -> Integer
-exMWiki num expon modul = exMHelper num expon modul 1
-  where exMHelper :: Integer -> Integer -> Integer -> Integer -> Integer
-        exMHelper _ 0 _ res = res
-        exMHelper num expon modul res = exMHelper (num * num `mod` modul) (expon `div` 2) modul nRes
-          where nRes = if odd expon then (res * num `mod` modul) else res
-
-exMReal :: Integer -> Integer -> Integer -> Integer
-exMReal base 0 _ = 1
-exMReal base e m | odd e = rem ((rem base m) * (exMReal base (e - 1) m)) m
-                 | otherwise = rem ((exMReal base (div e 2) m) ^ 2) m
+-- A quickcheck property test is located src/week6/Lab6Spec.hs.
+exMFast :: Integer -> Integer -> Integer -> Integer
+exMFast _ 0 m = rem 1 m
+exMFast base e m | odd e = rem ((rem base m) * (exMFast base (e - 1) m)) m
+                 | otherwise = rem ((exMFast base (div e 2) m) ^ 2) m
 
 
 -- Exercise 2
--- Benchmarks of the two exponention functions above and the native implementation (^) are generated
+-- Benchmarks of the exponention function above and the native implementation (^) are generated
 -- in src/week6/expBenchmarks.html. They are done in a reliable manner using criterion - a benchmarking
 -- library for Haskell. The benchmark is done with relatively small numbers because of the slow native
--- implementation (95.60 ms for the native function vs less that 0.01 ms for the other two in the example).
+-- implementation (95.70 ms for the native function vs less that 0.01 ms for {exMFast} in the example).
 
 
 -- Exercise 3
@@ -92,9 +86,29 @@ findMarsennePrimes = filterM (\x -> primeMR 10 (2^x - 1)) (take 500 $ drop 50 pr
 
 
 -- Еxercise 8
-bitLength :: Integer -> Int
-bitLength 0 = 0
-bitLength x = 1 + bitLength (div x 2)
+genPrimesWithBitLength :: Int -> IO (Integer, Integer)
+genPrimesWithBitLength bitLength = do
+                                   firstPrime <- getFirstPrimeNumber start end
+                                   secondPrime <- getFirstPrimeNumber (firstPrime + 1) end
+                                   return (firstPrime, secondPrime)
+                                   where start = 2 ^ (bitLength - 1)
+                                         end   = 2 ^ bitLength - 1
 
-groupByBitLength :: [[Integer]]
-groupByBitLength = groupBy ( \ x y -> bitLength x == bitLength y) $ take 200 primes
+getFirstPrimeNumber :: Integer -> Integer -> IO Integer
+getFirstPrimeNumber start end = do
+                                firstPrime <- firstM (primeMR 5) [start..end]
+                                case firstPrime of
+                                     (Just p) -> return p    
+                                     (Nothing) -> error "No prime between these numbers"
+
+-- Shows show to use RSA public key encryption/decryption.
+demoRsa :: IO ()
+demoRsa = do
+  primes_pair <- genPrimesWithBitLength 40
+  let prime1 = fst primes_pair
+  let prime2 = snd primes_pair
+
+  let enc = rsa_encode (rsa_public prime1 prime2)
+  let dec = rsa_decode (rsa_private prime1 prime2)
+
+  putStrLn $ show $ dec(enc 123) == 123

@@ -11,5 +11,4 @@ bigMod = 10 ^ 20
 benchmarks :: [Benchmark]
 benchmarks = 
     [ bench "expM - native implementation" (nf (expM bigBase bigExp) bigMod),
-      bench "exMReal - our implementation" (nf (exMReal bigBase bigExp) bigMod),
-      bench "exMWiki - wiki suggested implementation" (nf (exMWiki bigBase bigExp) bigMod)]
+      bench "exMFast - our implementation" (nf (exMFast bigBase bigExp) bigMod)]

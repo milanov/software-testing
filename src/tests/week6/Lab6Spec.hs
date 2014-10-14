@@ -2,13 +2,12 @@ module Lab6Spec(spec) where
 
 import Test.Hspec
 import Test.QuickCheck
-import Data.List
 
 import Lab6
-import Week6
 
 
 spec :: Spec
 spec = do
-  it "is pendint" $ do
-    pending
+  describe "exMFast" $ do
+    it "computes its result correctly" $ property $
+      (\(NonNegative x) (NonNegative y) (Positive z) -> exMFast x y z == rem (x ^ y) z)

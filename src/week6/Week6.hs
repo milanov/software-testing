@@ -143,8 +143,7 @@ rsa_public p q = let
  in 
    (e,p*q)
 
-rsa_private ::  Integer -> Integer 
-                -> (Integer,Integer)
+rsa_private ::  Integer -> Integer -> (Integer,Integer)
 rsa_private p q = let 
    n = p * q
    phi = (p-1)*(q-1)
