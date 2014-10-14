@@ -4,12 +4,12 @@ import Criterion (Benchmark, bench, nf)
 import Week6
 import Lab6
 
-bigBase = 2988348162058574136915891421498819466320163312926952423791023078876139
-bigExp = 2351399303373464486466122544523690094744975233415544072992656881240319
-bigMod = 10 ^ 40
+bigBase = 2988348162
+bigExp = 13993024
+bigMod = 10 ^ 20
 
 benchmarks :: [Benchmark]
 benchmarks = 
-    [ bench "a" (nf (exM' bigBase bigExp) bigMod),
-      bench "a" (nf (expM bigBase bigExp) bigMod)
-      bench "a" (nf (expMK bigBase bigExp) bigMod)]
+    [ bench "expM - native implementation" (nf (expM bigBase bigExp) bigMod),
+      bench "exMReal - our implementation" (nf (exMReal bigBase bigExp) bigMod),
+      bench "exMWiki - wiki suggested implementation" (nf (exMWiki bigBase bigExp) bigMod)]

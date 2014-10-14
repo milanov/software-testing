@@ -66,7 +66,7 @@ expM x y = rem (x^y)
 exM :: Integer -> Integer -> Integer -> Integer
 exM base 0 m = 1
 exM base e m | odd e = rem ((rem base m) * (exM base (e - 1) m)) m
-              | otherwise = rem ((exM base (div e 2) m) ^ 2) m
+             | otherwise = rem ((exM base (div e 2) m) ^ 2) m
 
 prime_test_F :: Integer -> IO Bool
 prime_test_F n = do 
