@@ -18,7 +18,7 @@ library
   -- exposed-modules: 
   other-modules: Sol1, Sol2, Lab1Bonus, Lab2, Lab3, Week3, GS, TAMO, Lab4, SetOrd, Lab5, Lab6
   default-language: Haskell2010
-  build-depends:  base == 4.6.*, random, hspec == 1.*, HUnit, QuickCheck, criterion == 1.*
+  build-depends:  base == 4.6.*, random, hspec == 1.*, HUnit, QuickCheck, criterion == 0.8.*, monad-loops == 0.3.*
   ghc-options:    -Wall
   hs-source-dirs: src,
                   src/week1,
@@ -29,7 +29,7 @@ library
                   src/week6
 
 test-suite SoftwareTesting2014Specs
-    build-depends:    base >= 4, random, hspec == 1.*, HUnit, QuickCheck, random
+    build-depends:    base >= 4, random, hspec == 1.*, HUnit, QuickCheck, random, monad-loops
     default-language: Haskell2010
     ghc-options:      -Wall
     main-is:          Spec.hs
@@ -40,7 +40,7 @@ test-suite SoftwareTesting2014Specs
                     src/tests/week4, src/tests/week5, src/tests/week6
 
 benchmark SoftwareTesting2014Benchmarks
-    build-depends:    base, criterion == 1.*, random
+    build-depends:    base, criterion == 0.8.*, random
     default-language: Haskell2010
     main-is:          Bench.hs
     type:             exitcode-stdio-1.0

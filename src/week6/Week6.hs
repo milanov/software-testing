@@ -21,8 +21,7 @@ factors n = let
     | otherwise      =    factors' n ps
 
 primes = sieve [2..]
-sieve (n:ns) = n : sieve 
-   (filter (\ m -> rem m n /= 0) ns)
+sieve (n:ns) = n : sieve (filter (\ m -> rem m n /= 0) ns)
 
 isPrime :: Integer -> Bool
 isPrime n = factors n == [n]
@@ -65,7 +64,9 @@ expM ::  Integer -> Integer -> Integer -> Integer
 expM x y = rem (x^y)
 
 exM :: Integer -> Integer -> Integer -> Integer
-exM = expM -- to be replaced by a fast version
+exM base 0 m = 1
+exM base e m | odd e = rem ((rem base m) * (exM base (e - 1) m)) m
+              | otherwise = rem ((exM base (div e 2) m) ^ 2) m
 
 prime_test_F :: Integer -> IO Bool
 prime_test_F n = do 
